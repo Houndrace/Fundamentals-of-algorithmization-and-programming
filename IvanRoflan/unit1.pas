@@ -7,12 +7,10 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls;
 
-const
-  n = 2;
-  m = 2;
+
 type
-  massivI = array [0..n] of real;
-  massivIJ = array [0..n, 0..m] of real;
+  massivI = array  of real;
+  massivIJ = array  of array of real;
 
   { TForm1 }
 
@@ -46,6 +44,7 @@ type
     Button33: TButton;
     Button34: TButton;
     Button35: TButton;
+    Button36: TButton;
     Button4: TButton;
     Button5: TButton;
     Button6: TButton;
@@ -54,9 +53,13 @@ type
     Button9: TButton;
     Edit1: TEdit;
     Edit2: TEdit;
+    Edit3: TEdit;
+    Edit4: TEdit;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
     Memo1: TMemo;
     procedure Button10Click(Sender: TObject);
     procedure Button11Click(Sender: TObject);
@@ -69,12 +72,22 @@ type
     procedure Button18Click(Sender: TObject);
     procedure Button19Click(Sender: TObject);
     procedure Button20Click(Sender: TObject);
+    procedure Button21Click(Sender: TObject);
+    procedure Button22Click(Sender: TObject);
+    procedure Button23Click (Sender : TObject );
+    procedure Button24Click (Sender : TObject );
+    procedure Button25Click (Sender : TObject );
+    procedure Button26Click (Sender : TObject );
+    procedure Button27Click (Sender : TObject );
+    procedure Button28Click (Sender : TObject );
+    procedure Button29Click (Sender : TObject );
     procedure Button4Click(Sender: TObject);
     procedure Button5Click(Sender: TObject);
     procedure Button6Click(Sender: TObject);
     procedure Button7Click(Sender: TObject);
     procedure Button8Click(Sender: TObject);
     procedure Button9Click(Sender: TObject);
+    procedure FormCreate (Sender : TObject );
     procedure setMassivIJ(var a : massivIJ);
     procedure getMassivIJ(var a : massivIJ);
     procedure setMassivI(var a : massivI);
@@ -97,7 +110,7 @@ var
   min, max : real;
   A, B : massivI;
   A1, B1 : massivIJ;
-
+  n, m : integer;
 
 
 implementation
@@ -106,10 +119,26 @@ implementation
 
 { TForm1 }
 
+procedure TForm1.FormCreate (Sender : TObject );
+begin
+ n := 1;
+ m := 1;
+end;
+
 procedure TForm1.setMassivIJ(var a : massivIJ);
 var
   space, s : string;
 begin
+ if (Edit3.Text = '') and (Edit4.Text = '') then
+    ShowMessage ('Необходимо ввести переменную количество строк и столбцов')
+  else
+ begin
+ n := StrToInt(Edit3.text);
+
+ m := StrToInt(Edit4.text);
+ SetLength(a, n, m);
+ dec(n);
+ dec(m);
  s := '';
  for i := 0 to n do
   begin
@@ -122,14 +151,19 @@ begin
             space := '';
             s := s + space + FloatToStr(a[i,j]);
           end;
-      Memo1.Lines.Add('Заданный массив: ' + s);
+      if i = 0 then
+      Memo1.Lines.Add('Заданный массив: ' + s)
+      else
+      Memo1.Lines.Add('                                   ' + s);
       s := '';
   end;
+ end;
 end;
 procedure TForm1.getMassivIJ(var a : massivIJ);
 var
   space, s : string;
 begin
+ SetLength(a, n, m);
  s := '';
  for i := 0 to n do
   begin
@@ -149,9 +183,15 @@ end;
 procedure TForm1.setMassivI(var a : massivI);
 var
   space, s : string;
-
 begin
- s := '';
+  if (Edit3.Text = '') then
+    ShowMessage ('Необходимо ввести переменную количество строк')
+  else
+  begin
+  n := StrToInt(Edit3.text);
+  SetLength(a, n);
+  dec (n);
+  s := '';
   for i := 0 to n do
   begin
     a[i] := StrToFloat(InputBox('Окно программы', 'Введите числа массива: ', ''));
@@ -162,11 +202,13 @@ begin
     s := s + space + FloatToStr(a[i]);
   end;
   Memo1.Lines.Add('Заданный массив: ' + s);
+  end;
 end;
 procedure TForm1.getMassivI(var a : massivI);
 var
   space, s : string;
 begin
+ SetLength(a, n);
  s := '';
   for i := 0 to n do
   begin
@@ -557,6 +599,218 @@ begin
  else
      Memo1.Lines.Add ('Сумму элементов найти невозможно - только один элемент удовлетворяет условию: ');
  end;
+end;
+
+procedure TForm1.Button21Click(Sender: TObject);
+var
+  c : integer;
+begin
+ if Edit1.Text = '' then
+   ShowMessage ('Для этой задачи необходимо ввести переменную "с"')
+ else
+ begin
+   ShowMessage('Дано число с – целое и массив целых чисел А из 10 элементов. В заданном массиве все элементы со значением с сделать равными 0');
+   setMassivI(A);
+   c := StrToInt(Edit1.Text);
+ for i := 0 to n do
+   if c = A[i] then
+      A[i] := 0;
+ getMassivI(A);
+ end;
+end;
+
+procedure TForm1.Button22Click(Sender: TObject);
+var
+  sum : real;
+  s : string;
+begin
+ShowMessage ('Задана квадратная матрица А размером NxN (N<=10), состоящая из вещественных чисел. Найти среднее арифметическое элементов каждой из строк этой матрицы');
+setMassivIJ (A1);
+sum := 0;
+s := '';
+for i := 0 to n do
+begin
+  for j := 0 to m do
+  begin
+    sum := sum + A1[i,j];
+  end;
+  s := s + FloatToStr(sum / (m+1)) + ' ';
+  sum := 0;
+end;
+Memo1.Lines.Add('Средние арифметические строк: ' + s);
+end;
+
+procedure TForm1.Button23Click (Sender : TObject );
+var
+  sum : real;
+  s : string;
+begin
+ShowMessage ('Задана квадратная матрица А размером NxN (N<=10), состоящая из вещественных чисел. Найти среднее арифметическое элементов каждой из столбцов этой матрицы');
+setMassivIJ (A1);
+sum := 0;
+s := '';
+for j := 0 to m do
+begin
+  for i := 0 to n do
+  begin
+    sum := sum + A1[i,j];
+  end;
+  s := s + FloatToStr(sum / (n+1)) + ' ';
+  sum := 0;
+end;
+Memo1.Lines.Add('Средние арифметические столбцов: ' + s);
+end;
+
+procedure TForm1.Button24Click (Sender : TObject );
+var
+  sum : real;
+  s : string;
+begin
+ShowMessage ('Задана квадратная матрица А размером NxN (N<=10), состоящая из вещественных чисел. Найти сумму каждого из столбцов этой матрицы');
+setMassivIJ (A1);
+sum := 0;
+s := '';
+for j := 0 to m do
+begin
+  for i := 0 to n do
+  begin
+    sum := sum + A1[i,j];
+  end;
+  s := s + FloatToStr(sum) + ' ';
+  sum := 0;
+end;
+Memo1.Lines.Add('Сумма столбцов: ' + s);
+end;
+
+procedure TForm1.Button25Click (Sender : TObject );
+var
+  mult : real;
+  s : string;
+begin
+ShowMessage ('Задана квадратная матрица А размером NxN (N<=10), состоящая из вещественных чисел. Найти произведение каждого из столбцов этой матрицы');
+setMassivIJ (A1);
+mult := 1;
+s := '';
+for j := 0 to m do
+begin
+  for i := 0 to n do
+  begin
+    mult := mult * A1[i,j];
+  end;
+  s := s + FloatToStr(mult) + ' ';
+  mult := 0;
+end;
+Memo1.Lines.Add('Произведение столбцов: ' + s);
+end;
+
+procedure TForm1.Button26Click (Sender : TObject );
+var
+  mult : real;
+  s : string;
+begin
+ShowMessage ('Задана квадратная матрица А размером NxN (N<=10), состоящая из вещественных чисел. Найти произведение каждой строки этой матрицы');
+setMassivIJ (A1);
+mult := 1;
+s := '';
+for i := 0 to n do
+begin
+  for j := 0 to m do
+  begin
+    mult := mult * A1[i,j];
+  end;
+  s := s + FloatToStr(mult) + ' ';
+  mult := 0;
+end;
+Memo1.Lines.Add('Произведение строк: ' + s);
+end;
+
+procedure TForm1.Button27Click (Sender : TObject );
+var
+  sum : real;
+  s : string;
+begin
+ShowMessage ('Задана квадратная матрица А размером NxN (N<=10), состоящая из вещественных чисел. Найти сумму каждой строки этой матрицы');
+setMassivIJ (A1);
+sum := 0;
+s := '';
+for i := 0 to n do
+begin
+  for j := 0 to m do
+  begin
+    sum := sum + A1[i,j];
+  end;
+  s := s + FloatToStr(sum) + ' ';
+  sum := 0;
+end;
+Memo1.Lines.Add('Сумма строк: ' + s);
+end;
+
+procedure TForm1.Button28Click (Sender : TObject );
+const
+  n = 3;
+var
+  space, s : string;
+  B2 : array [0..n * 2 - 1] of real;
+  A2 : array [0..n-1] of real;
+begin
+ShowMessage ('Запишите подряд в массив A(N) элементы заданного массива B(2N), стоящие на нечетных местах');
+  s := '';
+  for i := 0 to 2 * n - 1 do
+  begin
+    B2[i] := StrToFloat(InputBox('Окно программы', 'Введите числа массива: ', ''));
+    if i <> 0 then
+            space := ' / '
+            else
+            space := '';
+    s := s + space + FloatToStr(B2[i]);
+    if i mod 2 = 0 then
+    A2[i div 2] := B2[i];
+  end;
+  Memo1.Lines.Add('Заданный массив: ' + s);
+    s := '';
+  for i := 0 to (n-1) do
+  begin
+    if i <> 0 then
+            space := ' / '
+            else
+            space := '';
+    s := s + space + FloatToStr(A2[i]);
+  end;
+  Memo1.Lines.Add('Конечный массив: ' + s);
+  end;
+
+procedure TForm1 .Button29Click (Sender : TObject );
+const
+  n = 3;
+var
+  space, s : string;
+  B2 : array [0..n * 2-1] of real;
+  A2 : array [0..n-1] of real;
+begin
+ShowMessage ('Запишите подряд в массив A(N) элементы заданного массива B(2N), стоящие на четных местах');
+  s := '';
+  for i := 0 to n * 2-1 do
+  begin
+    B2[i] := StrToFloat(InputBox('Окно программы', 'Введите числа массива: ', ''));
+    if i <> 0 then
+            space := ' / '
+            else
+            space := '';
+    s := s + space + FloatToStr(B2[i]);
+    if i mod 2 <> 0 then
+    A2[i div 2] := B2[i];
+  end;
+  Memo1.Lines.Add('Заданный массив: ' + s);
+    s := '';
+  for i := 0 to n-1 do
+  begin
+    if i <> 0 then
+            space := ' / '
+            else
+            space := '';
+    s := s + space + FloatToStr(A2[i]);
+  end;
+  Memo1.Lines.Add('Конечный массив: ' + s);
 end;
 
 end.
