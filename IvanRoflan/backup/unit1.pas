@@ -5,7 +5,7 @@ unit Unit1;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,Menus;
 
 
 type
@@ -55,11 +55,13 @@ type
     Edit2: TEdit;
     Edit3: TEdit;
     Edit4: TEdit;
-    Label1: TLabel;
+    Edit5 : TEdit ;
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
+    Label6 : TLabel ;
+    Label7: TLabel;
     Memo1: TMemo;
     procedure Button10Click(Sender: TObject);
     procedure Button11Click(Sender: TObject);
@@ -81,6 +83,13 @@ type
     procedure Button27Click (Sender : TObject );
     procedure Button28Click (Sender : TObject );
     procedure Button29Click (Sender : TObject );
+    procedure Button30Click (Sender : TObject );
+    procedure Button31Click (Sender : TObject );
+    procedure Button32Click (Sender : TObject );
+    procedure Button33Click (Sender : TObject );
+    procedure Button34Click(Sender: TObject);
+    procedure Button35Click(Sender: TObject);
+    procedure Button36Click(Sender: TObject);
     procedure Button4Click(Sender: TObject);
     procedure Button5Click(Sender: TObject);
     procedure Button6Click(Sender: TObject);
@@ -88,6 +97,7 @@ type
     procedure Button8Click(Sender: TObject);
     procedure Button9Click(Sender: TObject);
     procedure FormCreate (Sender : TObject );
+    procedure MenuItem2Click(Sender: TObject);
     procedure setMassivIJ(var a : massivIJ);
     procedure getMassivIJ(var a : massivIJ);
     procedure setMassivI(var a : massivI);
@@ -125,17 +135,20 @@ begin
  m := 1;
 end;
 
+procedure TForm1.MenuItem2Click(Sender: TObject);
+begin
+  close
+end;
+
 procedure TForm1.setMassivIJ(var a : massivIJ);
 var
   space, s : string;
 begin
- if (Edit3.Text = '') and (Edit4.Text = '') then
-    ShowMessage ('Необходимо ввести переменную количество строк и столбцов')
-  else
+ if (Edit3.Text <> '') and (Edit4.Text <> '') then
  begin
- n := StrToInt(Edit3.text);
-
- m := StrToInt(Edit4.text);
+   n := StrToInt(Edit3.text);
+   m := StrToInt(Edit4.text);
+ end;
  SetLength(a, n, m);
  dec(n);
  dec(m);
@@ -158,7 +171,7 @@ begin
       s := '';
   end;
  end;
-end;
+
 procedure TForm1.getMassivIJ(var a : massivIJ);
 var
   space, s : string;
@@ -184,10 +197,7 @@ procedure TForm1.setMassivI(var a : massivI);
 var
   space, s : string;
 begin
-  if (Edit3.Text = '') then
-    ShowMessage ('Необходимо ввести переменную количество строк')
-  else
-  begin
+  if Edit3.Text <>  '' then
   n := StrToInt(Edit3.text);
   SetLength(a, n);
   dec (n);
@@ -202,7 +212,6 @@ begin
     s := s + space + FloatToStr(a[i]);
   end;
   Memo1.Lines.Add('Заданный массив: ' + s);
-  end;
 end;
 procedure TForm1.getMassivI(var a : massivI);
 var
@@ -226,7 +235,6 @@ procedure TForm1.Button1Click(Sender: TObject);
 begin
   ShowMessage ('В заданном массиве A(N) найти произведение наибольшего и наименьшего элементов');
   setMassivI(A);
-
   max := A[i];
   min := A[i];
   for i := 0 to n do
@@ -266,8 +274,6 @@ var
 begin
   ShowMessage ('В заданном массиве A(N) поменяйте местами наибольший и наименьший элементы');
   setMassivI(A);
-
-
   max := A[0];
   min := A[0];
   maxI := 0;
@@ -286,7 +292,7 @@ begin
             end;
           end;
 
-
+  ShowMessage(intToStr(minI) + '   ' + intToStr(maxI));
   A[minI] := max;
   A[maxI] := min;
 
@@ -309,7 +315,7 @@ begin
  end;
 
  if (specNum <> '') then
- Memo1.Lines.Add('Индексы элементов: ' + specNum)
+ Memo1.Lines.Add('Индекс(ы) элементов: ' + specNum)
  else
  Memo1.Lines.Add('Элементов с плавающей точкой нет');
 end;
@@ -320,6 +326,7 @@ var
 begin
  ShowMessage ('Дан массив A(N). Получите массив B(N), i-й элемент которого равен среднему арифметическому первых i элементов массива');
  setMassivI(A);
+ setLength(B, n+1);
  num := 0;
  for i := 0 to n do
  begin
@@ -746,71 +753,141 @@ Memo1.Lines.Add('Сумма строк: ' + s);
 end;
 
 procedure TForm1.Button28Click (Sender : TObject );
-const
-  n = 3;
 var
   space, s : string;
-  B2 : array [0..n * 2 - 1] of real;
-  A2 : array [0..n-1] of real;
 begin
 ShowMessage ('Запишите подряд в массив A(N) элементы заданного массива B(2N), стоящие на нечетных местах');
+  n := strtoint(Edit3.Text);
+  SetLength(B, 2 * n);
+  SetLength(A, n);
   s := '';
   for i := 0 to 2 * n - 1 do
   begin
-    B2[i] := StrToFloat(InputBox('Окно программы', 'Введите числа массива: ', ''));
+    B[i] := StrToFloat(InputBox('Окно программы', 'Введите числа массива: ', ''));
     if i <> 0 then
             space := ' / '
             else
             space := '';
-    s := s + space + FloatToStr(B2[i]);
+    s := s + space + FloatToStr(B[i]);
     if i mod 2 = 0 then
-    A2[i div 2] := B2[i];
+    A[i div 2] := B[i];
   end;
   Memo1.Lines.Add('Заданный массив: ' + s);
     s := '';
-  for i := 0 to (n-1) do
+  for i := 0 to n - 1 do
   begin
     if i <> 0 then
             space := ' / '
             else
             space := '';
-    s := s + space + FloatToStr(A2[i]);
+    s := s + space + FloatToStr(A[i]);
   end;
   Memo1.Lines.Add('Конечный массив: ' + s);
   end;
 
 procedure TForm1 .Button29Click (Sender : TObject );
-const
-  n = 3;
 var
   space, s : string;
-  B2 : array [0..n * 2-1] of real;
-  A2 : array [0..n-1] of real;
 begin
 ShowMessage ('Запишите подряд в массив A(N) элементы заданного массива B(2N), стоящие на четных местах');
+n := strtoint(Edit3.Text);
+SetLength(B, 2 * n);
+SetLength(A, n);
+s := '';
+for i := 0 to 2 * n - 1 do
+begin
+  B[i] := StrToFloat(InputBox('Окно программы', 'Введите числа массива: ', ''));
+  if i <> 0 then
+          space := ' / '
+          else
+          space := '';
+  s := s + space + FloatToStr(B[i]);
+  if i mod 2 = 0 then
+  A[i div 2] := B[i];
+end;
+Memo1.Lines.Add('Заданный массив: ' + s);
   s := '';
-  for i := 0 to n * 2-1 do
-  begin
-    B2[i] := StrToFloat(InputBox('Окно программы', 'Введите числа массива: ', ''));
-    if i <> 1 then
-            space := ' / '
-            else
-            space := '';
-    s := s + space + FloatToStr(B2[i]);
-    if i mod 2 <> 0 then
-    A2[i div 2] := B2[i];
-  end;
-  Memo1.Lines.Add('Заданный массив: ' + s);
-    s := '';
-  for i := 0 to n-1 do
-  begin
-    if i <> 0 then
-            space := ' / '
-            else
-            space := '';
-    s := s + space + FloatToStr(A2[i]);
-  end;
-  Memo1.Lines.Add('Конечный массив: ' + s);
+for i := 0 to n - 1 do
+begin
+  if i <> 0 then
+          space := ' / '
+          else
+          space := '';
+  s := s + space + FloatToStr(A[i]);
+end;
+Memo1.Lines.Add('Конечный массив: ' + s);
+end;
+
+procedure TForm1 .Button30Click (Sender : TObject );
+var
+  first : real;
+begin
+ShowMessage ('Осуществите циклический сдвиг компонент заданного вектора A(N) влево на одну позицию');
+setMassivI(A);
+first := A[0];
+for i := 0 to n do
+    A[i] := A[i+1];
+A[n] := first;
+getMassivI(A);
+end;
+
+procedure TForm1 .Button31Click (Sender : TObject );
+var
+  last : real;
+begin
+ShowMessage ('Осуществите циклический сдвиг компонент заданного вектора A(N) вправо на одну позицию');
+setMassivI(A);
+last := A[n];
+for i := n downto 0 do
+  A[i+1] := A[i];
+A[0] := last;
+getMassivI(A);
+end;
+
+procedure TForm1 .Button32Click (Sender : TObject );
+var
+  num : longint;
+  max : integer;
+begin
+ShowMessage ('С клавиатуры вводится натуральное число. Найти его наибольшую цифру. Например, введено число 764580. Наибольшая цифра в нем 8');
+num := strtoint(Edit5.Text);
+max := 0;
+while num <> 0 do
+begin
+  if (num mod 10) > max then
+     max := num mod 10;
+  num := num div 10;
+end;
+Memo1.Lines.Add('Наибольшая цифра в числе - ' + IntToStr(max));
+end;
+
+procedure TForm1.Button33Click (Sender : TObject );
+begin
+ShowMessage('Элементы заданного массива B(N) перепишите в новый массив A(N) в обратном порядке');
+setMassivI(B);
+setLength(A, n+1);
+for i := 0 to n do
+    A[i] := B[n-i];
+getMassivI(A);
+end;
+
+procedure TForm1.Button34Click(Sender: TObject);
+begin
+  Memo1.Lines.Clear;
+end;
+
+procedure TForm1.Button35Click(Sender: TObject);
+begin
+  close
+end;
+
+procedure TForm1.Button36Click(Sender: TObject);
+begin
+Edit1.Text := '';
+Edit2.Text := '';
+Edit3.Text := '';
+Edit4.Text := '';
+Edit5.Text := '';
 end;
 
 end.
