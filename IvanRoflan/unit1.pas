@@ -802,7 +802,7 @@ begin
           else
           space := '';
   s := s + space + FloatToStr(B[i]);
-  if i mod 2 = 0 then
+  if i mod 2 <> 0 then
   A[i div 2] := B[i];
 end;
 Memo1.Lines.Add('Заданный массив: ' + s);

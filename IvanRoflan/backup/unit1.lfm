@@ -4,8 +4,8 @@ object Form1: TForm1
   Top = 97
   Width = 1354
   Caption = 'Практические задания 1-33'
-  ClientHeight = 705
-  ClientWidth = 1354
+  ClientHeight = 0
+  ClientWidth = 0
   OnCreate = FormCreate
   LCLVersion = '2.2.0.1'
   WindowState = wsMaximized

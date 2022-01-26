@@ -13,6 +13,8 @@ type
 
   TForm1 = class(TForm)
     Button1: TButton;
+    Edit1: TEdit;
+    Memo1: TMemo;
     StringGrid1: TStringGrid;
     StringGrid2: TStringGrid;
     procedure Button1Click(Sender: TObject);
@@ -33,31 +35,35 @@ implementation
 
 procedure TForm1.Button1Click(Sender: TObject);
 const
-  n = 5;
-  m = 5;
+  m = 3;
+  n = 3;
 var
-  i, j: integer;
-  A, B: array [1..n, 1..m] of integer;
+  i, j, S: integer;
+  A: array [1..n, 1..m] of integer;
 begin
-  for  i:= 1 to n do
-   for j:= 1 to m do
+S := 0;
+StringGrid1.DefaultRowHeight := 40;
+StringGrid1.DefaultColWidth := StringGrid1.DefaultRowHeight;
+  for  i:= 1 to m do
+   for j:= 1 to n do
     begin
      if i <> 0 then StringGrid1.Cells[i, 0] := intToStr(i);
         if j <> 0 then StringGrid1.Cells[0, j] := intToStr(j);
-        A[i,j] := random(228);
-       StringGrid1.Cells[i, j] := intToStr(A[i, j]);
+          A[i, j] := StrToInt(StringGrid1.Cells[j, i]);
     end;
 
-  for  i:= 1 to n do
-   for j:= 1 to m do
+
+  for  i:= 1 to m do
+   for j:= 1 to n do
     begin
-     if i <> 0 then StringGrid2.Cells[i, 0] := intToStr(i);
-        if j <> 0 then StringGrid2.Cells[0, j] := intToStr(j);
-         B[i, j] := - A[i, j];
-       StringGrid2.Cells[i, j] := intToStr(B[i, j]);
+     S := S + A[i, j];
+     Memo1.Lines.Add(IntToStr(A[i, j]));
     end;
+ShowMessage (IntToStr(S));
+
 
 end;
+
 
 end.
 
